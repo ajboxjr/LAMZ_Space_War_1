@@ -1,0 +1,133 @@
+/* @font-face {*/
+/*         font-family: 'ChunkFiveRegular';*/
+/*         src: url('Chunkfive-webfont.eot');*/
+/*         src: url('Chunkfive-webfont.eot?#iefix') format('embedded-opentype'),*/
+/*         url('Chunkfive-webfont.woff') format('woff'),*/
+/*         url('Chunkfive-webfont.ttf') format('truetype'),*/
+/*         url('Chunkfive-webfont.svg#ChunkFiveRegular') format('svg');*/
+/*         font-weight: normal;*/
+/*         font-style: normal;*/
+/*}*/
+
+body {
+
+	background-image: url("http://i.space.com/images/i/000/040/698/wW4/deep-space-la-silla-1920.jpg?1405566157");
+}
+
+#description {
+
+	height:150px;
+	width: auto;
+	font-family: Verdana;
+	color: yellow;
+	border-style: solid;
+	text-align: center;
+	border-radius: 15px;
+	margin: 25px;
+	margin-top: 10px;     /*10px*/
+	clear: both;
+}
+
+p {
+
+	margin: 15px;
+
+}
+#messageChat{
+
+	height:400px;
+	width:300px;
+	color: orange;
+	border-style: solid;
+	border-radius: 15px;
+	border-color: yellow;
+	padding: 5px;
+	overflow-y: auto;
+	font-family: arial;
+	margin: 25px;
+	margin-bottom: 10px;
+	float:left;	
+
+}
+
+
+h1 {
+
+	margin-left:15px;
+
+}
+
+#clear{
+	background-color: black;
+	border-radius: 10px;
+	border-color: yellow;
+	font-size: 10px;
+	height: 30px;
+	width: 75px;
+	color: orange;
+	margin-top: -10px;
+    
+}
+
+#banner{
+	font-family: arial;
+	font-size: 80px;
+	font-style: italic;
+	color: yellow;
+	text-align: center;
+	margin-top: -100px;
+	margin-bottom: -100px;
+}
+
+#nameInput {
+	height: 25px;
+	width: 75px;
+	/*float: left;*/
+	border-style: solid;  
+	border-radius: 10px;
+	border-color: yellow;
+	background: black;
+	text-align: center;
+	font-size: 15px;
+	margin-left: 25px;
+	color: yellow
+}
+
+#messageInput {
+	height: 25px;
+	width: 148px;
+	border-style: solid;
+	border-radius: 10px;
+	border-color: yellow;
+	background: black;
+	text-align: left;
+	font-size: 15px;
+	color:yellow;
+}
+
+#gameLAMZ {
+    height: 450px;
+    width: 1000px;
+    border-style: solid;
+	border-radius: 15px;
+	border-color: yellow;
+	margin: 25px;
+	margin-bottom: 10px; 
+	float: right;
+	position: relative;
+	overflow: hidden;
+}
+
+#chatLabel {
+	height: 40px;
+	width: 320px;
+	color: yellow;
+	font-size: 20px;
+	text-align: center;
+	padding: -5px;
+	word-spacing: 0px;
+	border-bottom-style: solid;
+	border-color: yellow;
+	margin-left: -10px;
+	margin-bottom: 10px;
+}

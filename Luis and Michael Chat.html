@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <link rel="stylesheet.css" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine">
+    
+<style>
+	p.outset {border-style: outset;}
+
+</style>
+
+	<title>LAMZ Space War</title>
+	<script src="https://cdn.firebase.com/js/client/1.0.19/firebase.js"></script>
+   	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'></script>
+    <script src='https://cdn.firebase.com/js/client/1.0.15/firebase.js'></script>
+    <link rel="stylesheet" type="text/css" href="stylesheet.css">
+    <script src="p5.js"></script>
+
+
+</head>
+
+<body>
+	
+
+		<div id= "banner">
+
+	<h3>LAMZ SPACE WAR I</h3>
+
+	</div> 
+
+
+	<div id="messageChat">
+	    
+	    <div id="chatLabel">
+	    	
+	    	<p>Chat</p>
+
+	    </div>
+	    
+	</div>
+	
+	<div id="gameLAMZ"> 
+
+	<script type="text/javascript" src="script.js" ></script>
+<!-- 	<canvas id="myCanvas" datasrc="script.js" width="1000" height="400"></canvas> -->
+
+	</div>
+    <input type="text" id="nameInput" placeholder="Name">
+	<input type="text" id="messageInput" placeholder="      Message...">
+	<input type="button" id="clear" value="Clear Chat">
+
+	<script>
+	
+	var myDataRef = new Firebase("https://luminous-fire-508.firebaseio.com/");
+	var myDataRef2 = new Firebase("https://luminous-fire-510.firebaseio.com/");
+
+	$("#messageInput").keypress(function (e) {
+		if (e.keyCode == 13){
+			var name = $("#nameInput").val();
+			var message = $("#messageInput").val();
+			if(message.trim() != ""){
+				myDataRef.push({
+					name: name,
+					text: message
+				});
+			}	
+			$("#messageInput").val("");
+		}
+		
+	});
+	myDataRef.on('child_added', function(snapshot) {
+		var message = snapshot.val();
+		displayChatMessage(message.name, message.text);
+	});
+
+	function displayChatMessage(name, text) {
+
+		text = LinkParser(text);
+
+        $("#messageChat").append("<strong>" + name +  "</strong>" + ": " + text + "<br>");
+       	$("#messageChat")[0].scrollTop = $("#messageChat")[0].scrollHeight;
+	};
+
+	$("#clear").click(function(){
+
+		myDataRef.remove();
+		$("#messageChat").empty();
+		$("#chatLabel").reload();
+		//location.reload();
+
+	});
+
+	// myDataRef2.on('child_added', function(snapshot){
+
+	// 	var ship = snapshot.val();
+	// 	Ship = new Ship(ship.x, ship.y)
+
+	// });
+
+	// myDataRef2.on('child_changed', function(snapshot){
+
+	// 	var ship = snapshot.val();
+	// 	Ship.x = ship.x;
+	// 	Ship.y = ship.y;
+
+	// });
+
+
+	// myDataRef2.push({
+
+	// 	x: x,
+	// 	y: y
+
+	// });
+
+
+	function LinkParser(string){
+
+
+		var indexHTTP = string.indexOf("http://");
+		var indexHTTPS = string.indexOf("https://");
+
+		if(indexHTTP != -1){
+
+			if(string.charAt(indexHTTP + 7) != null){
+
+				var indexSpace = string.indexOf(" ", indexHTTP);
+				
+				if(indexSpace == -1) {
+
+					var strHTML = string.substring(indexHTTP, string.length);
+					indexSpace = string.length;
+				}
+				else {
+					var strHTML = string.substring(indexHTTP, indexSpace);
+				}
+
+				text = string.substring(0, indexHTTP) + '<a href = "' + strHTML + '">' + strHTML + "</a>" + string.substring(indexSpace, string.length + 1);
+
+				return text;
+			}
+
+		}
+
+		return string;
+
+	}; //NOTE: THIS CODE WILL NOT WORK IF SPACES ARE BEFORE LINK - REWORK TO INCLUDE THIS EXCEPTION
+
+	</script>
+
+	<div id = "description">
+		
+		<h2>L.A.M.Z. SPACE WAR I</h2>
+
+		<p>A game of great peril and asteroids. Play with your friends on multiplayer and it's your choice whether to attack or save them from the dangerous asteroids. Chat with your friends for help or just for the fun of it.
+		Controls:
+		[A] LEFT
+		[D] RIGHT
+		[W] UP
+		[S] DOWN
+		[SPACE] SHOOT
+		[LEFT ARROW] TURN COUNTER CLOCK-WISE
+		[RIGHT ARROW] TURN CLOCK-WISE
+		</p>
+
+
+	</div>
+
+
+</body>
+
+</html>

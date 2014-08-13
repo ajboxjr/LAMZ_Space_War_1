@@ -33,6 +33,8 @@ var shipControl = 0;
 var shipDic;
 var shotIs = false;
 var shots = [];
+var tempImg;
+
 
 //float angle = 0;
 
@@ -104,26 +106,26 @@ function setup () {
       shipProperties
     );
 
-  }
+  };
   //Moving Ship Across The Screen
   Ship.prototype.move = function() {
-      if(leftPress === true && this.x>0) {
+      if(leftPress === true && this.x>0 && upPress=== false && downPress === false) {
         this.img = imgLeft;
         this.x+=-this.velx;
  
       }
-      if (rightPress === true && this.x<870) {
+      if (rightPress === true && this.x<870 && upPress === false && downPress === false) {
         this.img = imgRight; 
         this.x+=this.velx;
         console.log("Ship1: " + Ship1.x + "Ship2: " + Ship2.x + "this.x " + this.x);
  
       }
-      if(upPress === true && this.y>0) {
+      if(upPress === true && this.y>0 && rightPress === false && leftPress === false) {
         this.img = imgUp;
         this.y-=this.vely;
 
       }
-      if (downPress === true && this.y<320){
+      if (downPress === true && this.y<320 && rightPress === false && leftPress === false){
         this.img = imgDown;
         this.y+=this.vely;
   
@@ -152,7 +154,7 @@ function setup () {
         this.img = imgDownR;
         this.y+=this.vely;
         this.x+=this.velx;
-      }      
+      }            
       // if(cwPress=== true){
       //   this.rotation+=1;
       // }
@@ -169,6 +171,57 @@ function setup () {
       });
 
   }
+  Ship.prototype.shoot = function() {
+
+  if(spacePress === true && this.img === imgUp && shotIs == false){
+
+    shots[shots.length] = new Shot(this.x + 64, this.y, 10, 5, 5);    
+    shotIs = true;
+  }
+
+  if(spacePress === true && this.img === imgDown && shotIs === false){
+
+    shots[shots.length] = new Shot(this.x + 64, this.y + 128, 10, 5, 5);
+    shotIs = true;
+  }
+
+  if(spacePress === true && this.img === imgLeft && shotIs === false){
+
+    shots[shots.length] = new Shot(this.x, this.y + 64, 10, 5, 5);
+    shotIs = true;
+  }
+
+  if(spacePress === true && this.img === imgRight && shotIs === false){
+
+    shots[shots.length] = new Shot(this.x + 128, this.y + 64, 10, 5, 5);
+    shotIs = true;
+  }
+
+  if(spacePress === true && this.img === imgUpL && shotIs === false){
+
+    shots[shots.length] = new Shot(this.x, this.y, 10, 5, 5);
+    shotIs = true;
+  }
+
+  if(spacePress === true && this.img === imgUpR && shotIs === false){
+
+    shots[shots.length] = new Shot(this.x + 128, this.y, 10, 5, 5);
+    shotIs = true;
+  }
+
+  if(shotIs == true){
+
+    if(tempImg == null){
+      tempImg = this.img;
+    }
+    shots[shots.length - 1].move(tempImg);
+    shots[shots.length - 1].paint();
+    shots[shots.length - 1].nullShip();    //add shotIs false to nullShip
+  }    
+
+
+  }
+
 
 
   //Painting ship onto the canvas
@@ -250,7 +303,7 @@ Shot.prototype.move = function(imgPlace){
   if(imgPlace == imgDownR){
     this.y = this.y - this.ySpd;
     this.x = this.x + this.xSpd;
-  }
+  }  
 }  
 
 
@@ -261,7 +314,8 @@ Shot.prototype.paint = function(){
 Shot.prototype.nullShip = function(){
   
   if(this.y <= -5 || this.y >= 455 || this.x <= -5 || this.x >= 1005){
-    shotIs = false;    
+    shotIs = false;
+    tempImg = null;    
     shots[shots.length - 1] = null;
   }
 }
@@ -275,7 +329,7 @@ Shot.prototype.nullShip = function(){
 function draw(){
   //Calling functions to redraw
   clear();
-  background(51);
+  //sbackground(51);
   Ship1.paint();
   Ship2.paint();
   if(shipControl == 1){
@@ -306,22 +360,55 @@ function draw(){
   // checkControl1();
   // checkControl2();
 
-  if(spacePress == true && shotIs == false){
-    //debugger
-    // for(var i = 0; i < shots.length; i++){
-    // }
-
-    shots[shots.length] = new Shot(Ship1.x + 64, Ship1.y, 10, 5, 5);    
-
-    //debugger
-    shotIs = true;
+  if(shipControl == 1){
+    Ship1.shoot();
   }
-  if(shotIs == true){
-
-    shots[shots.length - 1].move(Ship1.img);
-    shots[shots.length - 1].paint();
-    shots[shots.length - 1].nullShip();    //add shotIs false to nullShip
+  if(shipControl == 2){
+    Ship2.shoot();
   }
+
+  // if(spacePress == true && Ship1.img == imgUp && shotIs == false){
+
+  //   shots[shots.length] = new Shot(Ship1.x + 64, Ship1.y, 10, 5, 5);    
+  //   shotIs = true;
+  // }
+
+  // if(spacePress == true && Ship1.img == imgDown && shotIs == false){
+
+  //   shots[shots.length] = new Shot(Ship1.x + 64, Ship1.y + 128, 10, 5, 5);
+  //   shotIs = true;
+  // }
+
+  // if(spacePress == true && Ship1.img == imgLeft && shotIs == false){
+
+  //   shots[shots.length] = new Shot(Ship1.x, Ship1.y + 64, 10, 5, 5);
+  //   shotIs = true;
+  // }
+
+  // if(spacePress == true && Ship1.img == imgRight && shotIs == false){
+
+  //   shots[shots.length] = new Shot(Ship1.x + 128, Ship1.y + 64, 10, 5, 5);
+  //   shotIs = true;
+  // }
+
+  // if(spacePress == true && Ship1.img == imgUpL && shotIs == false){
+
+  //   shots[shots.length] = new Shot(Ship1.x, Ship1.y, 10, 5, 5);
+  //   shotIs = true;
+  // }
+
+  // if(spacePress == true && Ship1.img == imgUpR && shotIs == false){
+
+  //   shots[shots.length] = new Shot(Ship1.x + 128, Ship1.y, 10, 5, 5);
+  //   shotIs = true;
+  // }
+
+  // if(shotIs == true){
+
+  //   shots[shots.length - 1].move(Ship1.img);
+  //   shots[shots.length - 1].paint();
+  //   shots[shots.length - 1].nullShip();    //add shotIs false to nullShip
+  // }
 }
 
 

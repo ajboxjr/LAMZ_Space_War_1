@@ -8,7 +8,7 @@ var leftPress =false;
 var rightPress = false;
 var upPress = false;
 var downPress =  false;
-// var rotateCW = false;
+// var rotateCW = false;  
 // var rotateCCW = false;
 var spacePress = false;
 var controlPress1 = false;
@@ -34,6 +34,9 @@ var shipDic;
 var shotIs = false;
 var shots = [];
 var tempImg;
+var imgDic;
+var hitAreaX = [];
+var hitAreaY=[];
 
 
 //float angle = 0;
@@ -59,26 +62,92 @@ function setup () {
   imgDownR = loadImage("http://i.imgur.com/Oej2Y1V.png");
   img = imgUp;
 
-  Ship1 = new Ship(0, 0, 6, 6, "shipdata1", 0, img, 1);
-  Ship2 = new Ship(100,100, 6, 6, "shipdata2", 0, img, 2);
+  Ship1 = new Ship(880, 340, 6, 6, "shipdata1", 0, img, 1);
+  Ship2 = new Ship(-2,-8, 6, 6, "shipdata2", 0, img, 2);
 
 
   myDataRef2.set({
     shipdata1: {
       x: Ship1.x,
       y: Ship1.y,
-      //rotation: Ship1.rotation,
-      isControl: isControl
+      isControl: isControl,
+      img: imgtoString(img)
     },
     shipdata2: {
       x: Ship2.x,
       y: Ship2.y,
-      //rotation: Ship2.rotation,
-      isControl: isControl
+      isControl: isControl,
+      img: imgtoString(img)
     }
   });
 
+  // var imgDic = {
+  //   imgUp:"",
+  //   imgDown:"",
+  //   imgLeft:"",
+  //   imgRight:""
+  // };
+
 }
+
+
+var imgtoString = function(img){
+
+  if(img == imgUp){
+    return "imgUp";
+  }
+  if(img == imgDown){
+    return "imgDown";
+  }
+  if(img == imgLeft){
+    return "imgLeft";
+  } 
+  if(img == imgRight){
+    return "imgRight";
+  }   
+  if(img == imgUpL){
+    return "imgUpL";
+  }
+  if(img == imgUpR){
+    return "imgUpR";
+  }
+  if(img == imgDownL){
+    return "imgDownL";
+  }   
+  if(img == imgDownR){
+    return "imgDownR";
+  }
+};
+
+var stringtoImg = function(str){
+
+  if(str == "imgUp"){
+    return imgUp;
+  }
+  if(str == "imgDown"){
+    return imgDown;
+  }
+  if(str == "imgLeft"){
+    return imgLeft;
+  }
+  if(str == "imgRight"){
+    return imgRight;
+  }
+  if(str == "imgUpL"){
+    return imgUpL;
+  }  
+  if(str == "imgUpR"){
+    return imgUpR;
+  }
+  if(str == "imgDownL"){
+    return imgDownL;
+  }
+  if(str == "imgDownR"){
+    return imgDownR;
+  }
+
+
+};
 
 
   //Creating Ship Class
@@ -97,8 +166,8 @@ function setup () {
     var shipProperties = {
       x: this.x,
       y: this.y,
-      //rotation: this.rotation,
-      isControl: false
+      isControl: false,
+      img: imgtoString(this.img)
 
     };
 
@@ -114,7 +183,7 @@ function setup () {
         this.x+=-this.velx;
  
       }
-      if (rightPress === true && this.x<870 && upPress === false && downPress === false) {
+      if (rightPress === true && this.x<900 && upPress === false && downPress === false) {
         this.img = imgRight; 
         this.x+=this.velx;
         console.log("Ship1: " + Ship1.x + "Ship2: " + Ship2.x + "this.x " + this.x);
@@ -125,7 +194,7 @@ function setup () {
         this.y-=this.vely;
 
       }
-      if (downPress === true && this.y<320 && rightPress === false && leftPress === false){
+      if (downPress === true && this.y<355 && rightPress === false && leftPress === false){
         this.img = imgDown;
         this.y+=this.vely;
   
@@ -165,8 +234,8 @@ function setup () {
         //shipdata1: {
           x: this.x,
           y: this.y,
-          //rotation: this.rotation,
-          isControl: true
+          isControl: true,
+          img: imgtoString(this.img)
         //}
       });
 
@@ -209,6 +278,18 @@ function setup () {
     shotIs = true;
   }
 
+  if(spacePress === true && this.img === imgDownL && shotIs === false){
+
+    shots[shots.length] = new Shot(this.x, this.y + 128, 10, 5, 5);
+    shotIs = true;
+  }
+
+  if(spacePress === true && this.img === imgDownR && shotIs === false){
+
+    shots[shots.length] = new Shot(this.x + 128, this.y + 128, 10, 5, 5);
+    shotIs = true;
+  }  
+
   if(shotIs == true){
 
     if(tempImg == null){
@@ -226,11 +307,18 @@ function setup () {
 
   //Painting ship onto the canvas
   Ship.prototype.paint = function() {
-    image(this.img,this.x,this.y);
+    if (this.img === imgDownR || this.img === imgDownL || this.img === imgUpL || this.img === imgUpR){
+    image(this.img,this.x,this.y,140,140); 
+    console.log(this.img.width,this.img.height);
+  }else{
+    image(this.img,this.x,this.y,100,100);
+    console.log(this.img.width,this.img.height);
+  }
     
       console.log("Painting " + this.shipdata + "at " + this.x + " " + this.y);
       console.log("the rotation is"+this.rotation);
   }
+
 
     /*
     If the ship is false set ship true and creating that ship.
@@ -255,8 +343,8 @@ Ship.prototype.checkControl = function(controlPress) {
 
         x: this.x,
         y: this.y,
-        //rotation:this.rotation,
-        isControl: true
+        isControl: true,
+        img: imgtoString(this.img)
 
     });
     shipControl = this.shipNum;    
@@ -297,11 +385,11 @@ Shot.prototype.move = function(imgPlace){
     this.x = this.x + this.xSpd;
   }  
   if(imgPlace == imgDownL){
-    this.y = this.y - this.ySpd;
+    this.y = this.y + this.ySpd;
     this.x = this.x - this.xSpd;
   }
   if(imgPlace == imgDownR){
-    this.y = this.y - this.ySpd;
+    this.y = this.y + this.ySpd;
     this.x = this.x + this.xSpd;
   }  
 }  
@@ -340,6 +428,7 @@ function draw(){
       var datasnap = snapshot.val();
       Ship2.x = datasnap.x;
       Ship2.y = datasnap.y;
+      Ship2.img = stringtoImg(datasnap.img);
       //Ship2.rotation= datasnap.rotation;
     });
   }
@@ -351,6 +440,7 @@ function draw(){
       var datasnap = snapshot.val();
       Ship1.x = datasnap.x;
       Ship1.y = datasnap.y;
+      Ship1.img = stringtoImg(datasnap.img);
       //Ship1.rotation = datasnap.rotation;
     });
   }
@@ -483,10 +573,41 @@ $(document).keyup(function (evt) {
   else if (evt.keyCode === 52){
     controlPress4 = false;
   }   
-  // else if (evt.keyCode === 37){
-  //   rotateCCW = false;
-  // }      
-  // else if (evt.keyCode === 39){
-  //  rotateCW = false;
-  // }
+
   });
+
+/*
+var hitRecieve = false;
+var shipLife = 5;
+var shipContact = false;
+
+if (shipContact = true){
+  hitRecieve = true;
+}
+
+if hitRecieve == true {
+  shipLife+ = -1
+  hitRecieve = false
+} 
+
+*/
+// function hitdetect(){
+
+// for(l= 0; l< this.ship.width;l++){
+//   hitAreaX+= this.ship.x +l;
+// }
+// for(z=0; l<this.ship.height;l++){
+//   hitAreaY+= this.ship.y +l;
+// }
+// for(arx= 0; this.hitAreaX; ar++)
+//   if(this.Ship.hitAreaX[ar]=== this.Shot.x){
+//     for(ary=0; this.hitAreaX; arr++){
+//       if(this.Ship.hitAreaY == this.Shot.y){
+//         this.Ship.velx =0;
+//       }
+//     }
+//   }
+
+
+
+
